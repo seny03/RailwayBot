@@ -1,0 +1,12 @@
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\bin\Debug\net6.0\TelegramTools.deps.json
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\bin\Debug\net6.0\TelegramTools.dll
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\bin\Debug\net6.0\TelegramTools.pdb
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.csproj.AssemblyReference.cache
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.AssemblyInfoInputs.cache
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.AssemblyInfo.cs
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.csproj.CoreCompileInputs.cache
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.dll
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\refint\TelegramTools.dll
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.pdb
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\ref\TelegramTools.dll

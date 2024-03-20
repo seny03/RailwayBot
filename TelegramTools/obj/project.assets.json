@@ -2,19 +2,6 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "CsvHelper/31.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/CsvHelper.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/CsvHelper.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
@@ -43,64 +30,10 @@
             "related": ".pdb;.xml"
           }
         }
-      },
-      "DataUtils/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "CsvHelper": "31.0.2"
-        },
-        "compile": {
-          "bin/placeholder/DataUtils.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/DataUtils.dll": {}
-        }
-      },
-      "TelegramTools/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "Telegram.Bot": "19.0.0"
-        },
-        "compile": {
-          "bin/placeholder/TelegramTools.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/TelegramTools.dll": {}
-        }
       }
     }
   },
   "libraries": {
-    "CsvHelper/31.0.2": {
-      "sha512": "ndlIN77XcFm6qqGlNPzl0XjVupMCBVhVSiO+1+X2UhJtnnvkx9f//7FOvlkLuEQ76NC3Y7owa8IOhgtKVa4H7Q==",
-      "type": "package",
-      "path": "csvhelper/31.0.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "csvhelper.31.0.2.nupkg.sha512",
-        "csvhelper.nuspec",
-        "lib/net462/CsvHelper.dll",
-        "lib/net462/CsvHelper.xml",
-        "lib/net47/CsvHelper.dll",
-        "lib/net47/CsvHelper.xml",
-        "lib/net48/CsvHelper.dll",
-        "lib/net48/CsvHelper.xml",
-        "lib/net6.0/CsvHelper.dll",
-        "lib/net6.0/CsvHelper.xml",
-        "lib/net7.0/CsvHelper.dll",
-        "lib/net7.0/CsvHelper.xml",
-        "lib/net8.0/CsvHelper.dll",
-        "lib/net8.0/CsvHelper.xml",
-        "lib/netstandard2.0/CsvHelper.dll",
-        "lib/netstandard2.0/CsvHelper.xml",
-        "lib/netstandard2.1/CsvHelper.dll",
-        "lib/netstandard2.1/CsvHelper.xml"
-      ]
-    },
     "Newtonsoft.Json/13.0.1": {
       "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
       "type": "package",
@@ -145,24 +78,11 @@
         "telegram.bot.19.0.0.nupkg.sha512",
         "telegram.bot.nuspec"
       ]
-    },
-    "DataUtils/1.0.0": {
-      "type": "project",
-      "path": "../DataUtils/DataUtils.csproj",
-      "msbuildProject": "../DataUtils/DataUtils.csproj"
-    },
-    "TelegramTools/1.0.0": {
-      "type": "project",
-      "path": "../TelegramTools/TelegramTools.csproj",
-      "msbuildProject": "../TelegramTools/TelegramTools.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "CsvHelper >= 31.0.2",
-      "DataUtils >= 1.0.0",
-      "Telegram.Bot >= 19.0.0",
-      "TelegramTools >= 1.0.0"
+      "Telegram.Bot >= 19.0.0"
     ]
   },
   "packageFolders": {
@@ -171,11 +91,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\79787\\source\\repos\\RailwayBot\\RailwayBot\\RailwayBot.csproj",
-      "projectName": "RailwayBot",
-      "projectPath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\RailwayBot\\RailwayBot.csproj",
+      "projectUniqueName": "C:\\Users\\79787\\source\\repos\\RailwayBot\\TelegramTools\\TelegramTools.csproj",
+      "projectName": "TelegramTools",
+      "projectPath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\TelegramTools\\TelegramTools.csproj",
       "packagesPath": "C:\\Users\\79787\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\RailwayBot\\obj\\",
+      "outputPath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\TelegramTools\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\79787\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -191,14 +111,7 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {
-            "C:\\Users\\79787\\source\\repos\\RailwayBot\\DataUtils\\DataUtils.csproj": {
-              "projectPath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\DataUtils\\DataUtils.csproj"
-            },
-            "C:\\Users\\79787\\source\\repos\\RailwayBot\\TelegramTools\\TelegramTools.csproj": {
-              "projectPath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\TelegramTools\\TelegramTools.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -211,10 +124,6 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
-          "CsvHelper": {
-            "target": "Package",
-            "version": "[31.0.2, )"
-          },
           "Telegram.Bot": {
             "target": "Package",
             "version": "[19.0.0, )"

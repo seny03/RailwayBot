@@ -19,3 +19,5 @@ C:\Users\79787\source\repos\RailwayBot\RailwayBot\obj\Debug\net6.0\RailwayBot.ge
 C:\Users\79787\source\repos\RailwayBot\RailwayBot\obj\Debug\net6.0\ref\RailwayBot.dll
 C:\Users\79787\source\repos\RailwayBot\RailwayBot\bin\Debug\net6.0\DataUtils.dll
 C:\Users\79787\source\repos\RailwayBot\RailwayBot\bin\Debug\net6.0\DataUtils.pdb
+C:\Users\79787\source\repos\RailwayBot\RailwayBot\bin\Debug\net6.0\TelegramTools.dll
+C:\Users\79787\source\repos\RailwayBot\RailwayBot\bin\Debug\net6.0\TelegramTools.pdb
