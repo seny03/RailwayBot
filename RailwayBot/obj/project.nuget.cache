@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "Es/k9X48+PguRb7KVhalHx6gd6HojSWpNuQlZyUAukn0OXxG3BcvdPi/ID6XNPC74emhjSsl75zoUww0MBulSw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\RailwayBot\\RailwayBot.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\79787\\.nuget\\packages\\csvhelper\\31.0.2\\csvhelper.31.0.2.nupkg.sha512",
+    "C:\\Users\\79787\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\79787\\.nuget\\packages\\telegram.bot\\19.0.0\\telegram.bot.19.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

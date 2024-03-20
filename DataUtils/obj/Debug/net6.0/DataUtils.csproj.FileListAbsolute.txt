@@ -1,0 +1,12 @@
+C:\Users\79787\source\repos\RailwayBot\DataUtils\bin\Debug\net6.0\DataUtils.deps.json
+C:\Users\79787\source\repos\RailwayBot\DataUtils\bin\Debug\net6.0\DataUtils.dll
+C:\Users\79787\source\repos\RailwayBot\DataUtils\bin\Debug\net6.0\DataUtils.pdb
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\DataUtils.csproj.AssemblyReference.cache
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\DataUtils.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\DataUtils.AssemblyInfoInputs.cache
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\DataUtils.AssemblyInfo.cs
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\DataUtils.csproj.CoreCompileInputs.cache
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\DataUtils.dll
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\refint\DataUtils.dll
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\DataUtils.pdb
+C:\Users\79787\source\repos\RailwayBot\DataUtils\obj\Debug\net6.0\ref\DataUtils.dll

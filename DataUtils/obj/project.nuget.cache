@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "PllTCXbU1zJvkxkLRYSd6/eeprnh5ocdv8dapEmi+ZEVQQdhXir8nE3Rl2Pl6561i4VDs2a0KPA4Pj7naxZ5ig==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\DataUtils\\DataUtils.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\79787\\.nuget\\packages\\csvhelper\\31.0.2\\csvhelper.31.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
