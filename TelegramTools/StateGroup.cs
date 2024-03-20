@@ -1,11 +1,11 @@
 ﻿namespace TelegramTools
 {
-    public enum State { Start, Finish }
+    public enum State { GetFile }
     public class StateGroup
     {
         public State? CurrentState
         {
-            get; private set;
+            get; set;
         } = null;
         State FirstState => (State)State.GetValues(typeof(State)).Cast<int>().Min();
         State LastState => (State)State.GetValues(typeof(State)).Cast<int>().Max();

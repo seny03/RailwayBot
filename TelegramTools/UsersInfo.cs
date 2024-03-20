@@ -1,5 +1,9 @@
 ﻿namespace TelegramTools
 {
+    /// <summary>
+    /// Позволяет получить информацию о пользователях, запустивших бота. 
+    /// Является синглетоном в потокобезопасной реализации.
+    /// </summary>
     public class UsersInfo
     {
         private static UsersInfo? s_instance;

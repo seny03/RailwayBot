@@ -11,7 +11,7 @@ namespace TelegramTools
         private readonly TelegramBotClient _client;
         private const string Token = "7193907178:AAEymT6ucM5VJsT95Uxfr1Vl-KcQlPtXCrE";
 
-        TelegramManager()
+        public TelegramManager()
         {
             _client = new TelegramBotClient(Token);
         }
@@ -38,7 +38,111 @@ namespace TelegramTools
 
         private async Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken cancellationToken)
         {
+            var usersInfo = UsersInfo.GetInstance();
+            if (update.Message is { } message)
+            {
+                var chatId = message.Chat.Id;
+                var state = usersInfo.GetState(chatId);
 
+                //_logger.LogInformation($"Запись в файл стейта пользователя с id {chatId}");
+
+                if (message.Text is { } messageText)
+                {
+                    //_logger.LogInformation($"Получено сообщение от пользователя с id {chatId}. Текст: {messageText}");
+                    await HandleUserMessage(client, chatId, cancellationToken, messageText, state);
+                }
+                else if (message.Document is { } messageDocument)
+                {
+                    //_logger.LogInformation($"Получено документ от пользователя с id {chatId}. " +
+                    //                       $"Файл: {messageDocument.FileName}");
+                    await HandleUserDocument(client, chatId, cancellationToken, messageDocument, state);
+                }
+            }
+        }
+
+        private async Task HandleUserMessage(ITelegramBotClient client, long chatId, CancellationToken cancellationToken, string messageText, StateGroup state)
+        {
+            switch (messageText)
+            {
+                case "/start":
+                    //_logger.LogInformation($"Получена команда /start от пользователя с id: {chatId}");
+                    await HandleCommandStart(client, chatId, cancellationToken, state);
+                    break;
+                //  switch-case для удобства добавления последующих команд.
+                default:
+                    switch (state.CurrentState)
+                    {
+                        case State.GetFile:
+                            await AskFile(client, chatId, cancellationToken);
+                            break;
+                        default:
+                            await HandleCommandStart(client, chatId, cancellationToken, state);
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        private async Task HandleUserDocument(ITelegramBotClient client, long chatId, CancellationToken cancellationToken, Document document, StateGroup state)
+        {
+            //_logger.LogInformation($"Начата обработка документа для пользователя с id: {chatId}");
+            var fileInfo = await client.GetFileAsync(document.FileId, cancellationToken);
+            var fileExtension = Path.GetExtension(fileInfo.FilePath);
+
+            if (state.CurrentState == State.GetFile)
+            {
+                switch (fileExtension)
+                {
+                    case ".csv":
+                        using (var stream = new MemoryStream())
+                        {
+                            await client.DownloadFileAsync(fileInfo.FilePath, stream);
+                            stream.Position = 0;
+                            using (StreamReader reader = new StreamReader(stream))
+                            {
+                                string fileContents = await reader.ReadToEndAsync();
+                                Console.WriteLine("File contents:");
+                                Console.WriteLine(fileContents);
+                            }
+                        }
+                        break;
+                    case ".json":
+                        break;
+                    default:
+                        await client.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: "Неправильное расшинерие файла, пожалуйста отправьте *csv* или *json* файл.",
+                            cancellationToken: cancellationToken);
+                        break;
+                }
+            }
+            else
+            {
+                await client.SendTextMessageAsync(
+                    chatId: chatId,
+                    text: "На этом этапе не нужно отправлять файл, попробуйте что-нибудь другое.",
+                    cancellationToken: cancellationToken);
+            }
+        }
+
+        private async Task HandleCommandStart(ITelegramBotClient client, long chatId, CancellationToken cancellationToken, StateGroup state)
+        {
+            //_logger.LogInformation($"Обработка команды /start пользователя с id: {chatId}");
+            state.CurrentState = State.GetFile;
+            await client.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Привет!\n\nЯ помогу Вам удобно просматривать информацию о станциях метро, используя сортировку и фильтрацию данных.\n\n" +
+                      "Просто отправьте *csv* или *json* файл.",
+                parseMode: ParseMode.Markdown,
+                cancellationToken: cancellationToken);
+        }
+        private async Task AskFile(ITelegramBotClient client, long chatId, CancellationToken cancellationToken)
+        {
+            await client.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Пожалуйста отправьте *csv* или *json* файл.",
+                parseMode: ParseMode.Markdown,
+                cancellationToken: cancellationToken);
         }
 
         private Task HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken cancellationToken)
