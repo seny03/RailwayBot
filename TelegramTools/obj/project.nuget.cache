@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "jW4e21DFgI1AX7KtMvBa8TidB+mQIEZysFFb90NQX+cSf6TulWxs5bnzi5gYHlxKrePpUVPeADSbEQN5VguKzg==",
+  "dgSpecHash": "/vXcxCmwPeblf1v6FaGeJ2NQf+x47Kd+cD2ugqfSJ9PLqaxGd/XaNNxzPa/2DrpFNAQbJ6+h4QOFD5QB99wINQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\TelegramTools\\TelegramTools.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\79787\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\79787\\.nuget\\packages\\csvhelper\\31.0.2\\csvhelper.31.0.2.nupkg.sha512",
+    "C:\\Users\\79787\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\79787\\.nuget\\packages\\telegram.bot\\19.0.0\\telegram.bot.19.0.0.nupkg.sha512"
   ],
   "logs": []

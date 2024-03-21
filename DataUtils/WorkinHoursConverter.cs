@@ -6,28 +6,35 @@ namespace DataUtils
 {
     public class WorkingHoursConverter : ITypeConverter
     {
-        public object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        public object ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
         {
-            if (text.ToLower() == "круглосуточно")
+            if (text is null)
+            {
+                return new WorkingHours(TimeSpan.MaxValue, TimeSpan.MinValue);
+            }
+            else if (text.ToLower() == "круглосуточно")
             {
                 return new WorkingHours(TimeSpan.MinValue, TimeSpan.MaxValue);
             }
-            try
+            else
             {
-                var times = text.Split('-');
-                if (times.Length != 2)
+                try
                 {
-                    throw new InvalidOperationException("Invalid working hours format.");
+                    var times = text.Split('-');
+                    if (times.Length != 2)
+                    {
+                        throw new InvalidOperationException("Необходимо указать промежуток времени через \"-\".");
+                    }
+
+                    var startTime = TimeSpan.Parse(times[0]);
+                    var endTime = TimeSpan.Parse(times[1]);
+
+                    return new WorkingHours(startTime, endTime);
                 }
-
-                var startTime = TimeSpan.Parse(times[0]);
-                var endTime = TimeSpan.Parse(times[1]);
-
-                return new WorkingHours(startTime, endTime);
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException($"Не удалось преобразовать строку \"{text}\" к формату промежутка времени: {ex.Message}");
+                catch (Exception ex)
+                {
+                    throw new ArgumentException($"Не удалось преобразовать строку \"{text}\" к формату промежутка времени: {ex.Message}");
+                }
             }
         }
 

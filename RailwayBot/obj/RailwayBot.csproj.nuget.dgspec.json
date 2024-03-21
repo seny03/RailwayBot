@@ -43,6 +43,10 @@
             "CsvHelper": {
               "target": "Package",
               "version": "[31.0.2, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             }
           },
           "imports": [
@@ -160,7 +164,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\79787\\source\\repos\\RailwayBot\\DataUtils\\DataUtils.csproj": {
+                "projectPath": "C:\\Users\\79787\\source\\repos\\RailwayBot\\DataUtils\\DataUtils.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

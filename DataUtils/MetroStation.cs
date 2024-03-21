@@ -26,8 +26,8 @@ namespace DataUtils
         public string? RailwayLine { get; set; }
 
         [JsonPropertyName("WorkingHours")]
-        //[TypeConverter(typeof(WorkingHoursConverter))]
         [Name("WorkingHours")]
+        [TypeConverter(typeof(WorkingHoursConverter))]
         public string? WorkingHours { get; set; }
 
         [JsonPropertyName("Latitude_WGS84")]

@@ -6,7 +6,7 @@
     /// </summary>
     public class UsersInfo
     {
-        private static UsersInfo? s_instance;
+        private static UsersInfo? s_instance = null;
         private static object s_instanceLock = new object();
 
         private Dictionary<long, StateGroup> _userState;

@@ -10,3 +10,6 @@ C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTo
 C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\refint\TelegramTools.dll
 C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.pdb
 C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\ref\TelegramTools.dll
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\bin\Debug\net6.0\DataUtils.dll
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\bin\Debug\net6.0\DataUtils.pdb
+C:\Users\79787\source\repos\RailwayBot\TelegramTools\obj\Debug\net6.0\TelegramTools.csproj.CopyComplete

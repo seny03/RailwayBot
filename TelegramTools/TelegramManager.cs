@@ -1,4 +1,7 @@
-﻿using Telegram.Bot;
+﻿using CsvHelper;
+using DataUtils;
+using Newtonsoft.Json;
+using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -82,38 +85,77 @@ namespace TelegramTools
                     break;
             }
         }
-
         private async Task HandleUserDocument(ITelegramBotClient client, long chatId, CancellationToken cancellationToken, Document document, StateGroup state)
         {
             //_logger.LogInformation($"Начата обработка документа для пользователя с id: {chatId}");
             var fileInfo = await client.GetFileAsync(document.FileId, cancellationToken);
-            var fileExtension = Path.GetExtension(fileInfo.FilePath);
+            var filePath = fileInfo.FilePath;
+            var fileExtension = Path.GetExtension(filePath);
 
             if (state.CurrentState == State.GetFile)
             {
-                switch (fileExtension)
+                if (filePath is null)
                 {
-                    case ".csv":
-                        using (var stream = new MemoryStream())
+                    await client.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "У программы нет доступа к этому файлу, попробуйте еще раз.",
+                        cancellationToken: cancellationToken
+                        );
+                }
+                else if (fileExtension == ".csv" || fileExtension == ".json")
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        await client.DownloadFileAsync(filePath, stream);
+                        stream.Position = 0;
+                        try
                         {
-                            await client.DownloadFileAsync(fileInfo.FilePath, stream);
-                            stream.Position = 0;
-                            using (StreamReader reader = new StreamReader(stream))
+                            if (fileExtension == ".csv")
                             {
-                                string fileContents = await reader.ReadToEndAsync();
-                                Console.WriteLine("File contents:");
-                                Console.WriteLine(fileContents);
+                                var stations = await CSVProcessing.Read(stream);
                             }
+                            else
+                            {
+                                var stations = await JSONProcessing.Read(stream);
+                                Console.WriteLine(stations[0].WorkingHours);
+                            }
+                            await client.SendTextMessageAsync(
+                                chatId: chatId,
+                                text: "Файл успешно прочитан.",
+                                cancellationToken: cancellationToken);
+                            //TODO:
                         }
-                        break;
-                    case ".json":
-                        break;
-                    default:
-                        await client.SendTextMessageAsync(
-                            chatId: chatId,
-                            text: "Неправильное расшинерие файла, пожалуйста отправьте *csv* или *json* файл.",
-                            cancellationToken: cancellationToken);
-                        break;
+                        catch (CsvHelperException ex)
+                        {
+                            await client.SendTextMessageAsync(
+                                chatId: chatId,
+                                text: $"В файле содержатся некорректные данные: номер строки *{ex.Context.Parser.Row}*, попробуйте еще раз.",
+                                parseMode: ParseMode.Markdown,
+                                cancellationToken: cancellationToken);
+                        }
+                        catch (JsonException ex)
+                        {
+                            await client.SendTextMessageAsync(
+                                chatId: chatId,
+                                text: $"В файле содержатся некорректные данные, попробуйте еще раз.\n\n {ex.Message}",
+                                cancellationToken: cancellationToken);
+                        }
+                        catch (Exception ex)
+                        {
+                            await client.SendTextMessageAsync(
+                                chatId: chatId,
+                                text: "Во время чтения файла возникла непредвиденная ошибка, попробуйте еще раз.",
+                                cancellationToken: cancellationToken);
+                        }
+                    }
+                }
+                else
+                {
+                    await client.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "Неправильное расшинерие файла, пожалуйста отправьте *csv* или *json* файл.",
+                        parseMode: ParseMode.Markdown,
+                        cancellationToken: cancellationToken);
                 }
             }
             else
