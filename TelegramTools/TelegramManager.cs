@@ -6,6 +6,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TelegramTools
 {
@@ -60,6 +61,79 @@ namespace TelegramTools
                     //                       $"Файл: {messageDocument.FileName}");
                     await HandleUserDocument(client, chatId, cancellationToken, messageDocument, state);
                 }
+                else
+                {
+                    await client.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "Получено сообщение, содержащее неизвестный объект, следуйте интсрукциям, которые были выше, или перезапустите бота, с помощью /start.",
+                        cancellationToken: cancellationToken);
+                }
+            }
+
+            else if (update.CallbackQuery is { } callbackQuery)
+            {
+                var chatId = callbackQuery.Message!.Chat.Id;
+                var fileId = UsersInfo.GetInstance().GetFileId(chatId);
+                var state = UsersInfo.GetInstance().GetState(chatId);
+                //_logger.LogInformation($"Получен callback от пользователя с id {chatId}. Callback data: {callbackQuery.Data}");
+
+                var fileInfo = fileId is null ? null : await client.GetFileAsync(fileId, cancellationToken);
+                var filePath = fileInfo?.FilePath ?? "";
+                var fileExtension = Path.GetExtension(filePath);
+                if (fileInfo is null)
+                {
+                    state.CurrentState = State.GetFile;
+                    await client.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "Время хранения файла истекло(\n Пожалуйста отправьте новый файл.",
+                        replyMarkup: new ReplyKeyboardRemove(),
+                        cancellationToken: cancellationToken);
+                }
+                else
+                {
+                    var stations = new List<MetroStation>();
+                    using (var stream = new MemoryStream())
+                    {
+                        await client.DownloadFileAsync(filePath, stream);
+                        stream.Position = 0;
+                        try
+                        {
+                            if (fileExtension == ".csv")
+                            {
+                                stations = await CSVProcessing.Read(stream);
+                            }
+                            else
+                            {
+                                stations = await JSONProcessing.Read(stream);
+                            }
+                        }
+                        catch (Exception ex) when (ex is CsvHelperException || ex is JsonException)
+                        {
+                            state.CurrentState = State.GetFile;
+
+                            await client.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: "При обработке файла произошла ошибка, пожалуйста отправьте новый файл.",
+                            replyMarkup: new ReplyKeyboardRemove(),
+                            cancellationToken: cancellationToken);
+                        }
+                    }
+
+                    // смотрим что нажал пользователь.
+                    switch (callbackQuery.Data)
+                    {
+                        case "filter_line":
+                            Console.WriteLine("something");
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+            }
+            else
+            {
+                // logger получен неизвестный объект
             }
         }
 
@@ -78,6 +152,9 @@ namespace TelegramTools
                         case State.GetFile:
                             await AskFile(client, chatId, cancellationToken);
                             break;
+                        case State.FileActionChoose:
+                            await HandleGetFileAction(client, chatId, messageText, cancellationToken, state);
+                            break;
                         default:
                             await HandleCommandStart(client, chatId, cancellationToken, state);
                             break;
@@ -85,7 +162,7 @@ namespace TelegramTools
                     break;
             }
         }
-        private async Task HandleUserDocument(ITelegramBotClient client, long chatId, CancellationToken cancellationToken, Document document, StateGroup state)
+        private async Task HandleUserDocument(ITelegramBotClient client, long chatId, CancellationToken cancellationToken, Telegram.Bot.Types.Document document, StateGroup state)
         {
             //_logger.LogInformation($"Начата обработка документа для пользователя с id: {chatId}");
             var fileInfo = await client.GetFileAsync(document.FileId, cancellationToken);
@@ -112,18 +189,34 @@ namespace TelegramTools
                         {
                             if (fileExtension == ".csv")
                             {
-                                var stations = await CSVProcessing.Read(stream);
+                                await CSVProcessing.Read(stream);
                             }
                             else
                             {
-                                var stations = await JSONProcessing.Read(stream);
-                                Console.WriteLine(stations[0].WorkingHours);
+                                await JSONProcessing.Read(stream);
                             }
+
+                            state.CurrentState = State.FileActionChoose;
+
+                            var markup = new ReplyKeyboardMarkup(new[]
+                            {
+                                new[]
+                                {
+                                    new KeyboardButton("Отфильтровать"),
+                                    new KeyboardButton("Отсортировать")
+                                },
+                            })
+                            {
+                                ResizeKeyboard = true
+                            };
+
                             await client.SendTextMessageAsync(
                                 chatId: chatId,
-                                text: "Файл успешно прочитан.",
+                                text: "Файл успешно прочитан, теперь выберите действие с файлом:",
+                                replyMarkup: markup,
                                 cancellationToken: cancellationToken);
-                            //TODO:
+
+                            UsersInfo.GetInstance().SetFileId(chatId, fileInfo.FileId);
                         }
                         catch (CsvHelperException ex)
                         {
@@ -176,6 +269,7 @@ namespace TelegramTools
                 text: "Привет!\n\nЯ помогу Вам удобно просматривать информацию о станциях метро, используя сортировку и фильтрацию данных.\n\n" +
                       "Просто отправьте *csv* или *json* файл.",
                 parseMode: ParseMode.Markdown,
+                replyMarkup: new ReplyKeyboardRemove(),
                 cancellationToken: cancellationToken);
         }
         private async Task AskFile(ITelegramBotClient client, long chatId, CancellationToken cancellationToken)
@@ -185,6 +279,68 @@ namespace TelegramTools
                 text: "Пожалуйста отправьте *csv* или *json* файл.",
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
+        }
+
+        private async Task HandleGetFileAction(ITelegramBotClient client, long chatId, string messageText, CancellationToken cancellationToken, StateGroup state)
+        {
+            switch (messageText)
+            {
+                case "Отфильтровать":
+                    {
+                        var markup = new InlineKeyboardMarkup(new[]
+                        {
+                            new[]
+                            {
+                                InlineKeyboardButton.WithCallbackData(text: "Station", callbackData: "filter_station"),
+                                InlineKeyboardButton.WithCallbackData(text: "RailwayLine", callbackData: "filter_line")
+                            },
+                            new[] { InlineKeyboardButton.WithCallbackData(text: "Station и RailwayLine", callbackData: "filter_both") }
+                        });
+
+                        await client.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: "Выберите поле для фильтрации:",
+                            replyMarkup: markup,
+                            cancellationToken: cancellationToken);
+                        break;
+                    }
+                case "Отсортировать":
+                    {
+                        var markup = new InlineKeyboardMarkup(new[]
+                        {
+                            new[] { InlineKeyboardButton.WithCallbackData(text: "ID по возрастанию", callbackData: "sort_ID")},
+                            new[] { InlineKeyboardButton.WithCallbackData(text: "По возрастанию времени открытия", callbackData: "sort_time") }
+                        });
+
+                        await client.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: "Выберите опцию для сортировки:",
+                            replyMarkup: markup,
+                            cancellationToken: cancellationToken);
+                        break;
+                    }
+                default:
+                    {
+                        var markup = new ReplyKeyboardMarkup(new[]
+                                {
+                                new[]
+                                {
+                                    new KeyboardButton("Отфильтровать"),
+                                    new KeyboardButton("Отсортировать")
+                                },
+                            })
+                        {
+                            ResizeKeyboard = true
+                        };
+
+                        await client.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: "Неизвестное действие, пожалуйста выберите из предложенных ниже:",
+                            replyMarkup: markup,
+                            cancellationToken: cancellationToken);
+                        break;
+                    }
+            }
         }
 
         private Task HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken cancellationToken)

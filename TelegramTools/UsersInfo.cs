@@ -10,10 +10,12 @@
         private static object s_instanceLock = new object();
 
         private Dictionary<long, StateGroup> _userState;
+        private Dictionary<long, string> _userLastFileId;
 
         private protected UsersInfo()
         {
             _userState = new Dictionary<long, StateGroup>();
+            _userLastFileId = new Dictionary<long, string>();
         }
         public static UsersInfo GetInstance()
         {
@@ -42,6 +44,23 @@
                 _userState[userId] = stateGroup;
                 return stateGroup;
             }
+        }
+
+        public string? GetFileId(long chatId)
+        {
+            if (_userLastFileId.ContainsKey(chatId))
+            {
+                return _userLastFileId[chatId];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void SetFileId(long chatId, string fileId)
+        {
+            _userLastFileId[chatId] = fileId;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace TelegramTools
 {
-    public enum State { GetFile }
+    public enum State { GetFile, FileActionChoose }
     public class StateGroup
     {
         public State? CurrentState
